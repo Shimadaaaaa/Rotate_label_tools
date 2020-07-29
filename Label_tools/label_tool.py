@@ -47,6 +47,8 @@ def show_img(img):
     cnt = 0
     bboxes = []
     points = []
+    cv2.namedWindow("image",0)
+    cv2.resizeWindow("image", 640, 640)
     cv2.imshow('image', img)
     cv2.setMouseCallback('image', click_event)
     k = cv2.waitKey()
@@ -108,26 +110,37 @@ def reload_bboxes(filepath, img):
         
 
 if __name__ == "__main__":
-    path = '8bit_image/'
+    path = './demo/'
     save_txt_path = 'txt/'
     save_image_path = 'labeled_image/'
-    imagelist = os.listdir(path)
-    i = 0
-    while (i < (len(imagelist)) and i >= 0):
-        imgname = imagelist[i] 
-        if(imgname.endswith(".jpg")):
-            print(imgname)
-            image_path = path+'/'+imgname
-            img = cv2.imread(image_path)
-            txt_path = (save_txt_path + imgname + '.txt')
-            img = reload_bboxes(txt_path, img)
-            bboxes, k = show_img(img)
-            write_bboxes(txt_path,bboxes)
-            cv2.imwrite(save_image_path+imgname, img)
-            i+=1
-            if k == 97:
-                i -= 2 
-            elif k == 27:
-                break
-    
-    pass
+    work_progress = 'progress.txt'
+    with open(work_progress, 'r+') as p:
+        line = p.readline()
+        if line:
+            i = int(line)
+            print(i)
+        else :
+            i = 0
+        imagelist = os.listdir(path)
+        while (i < (len(imagelist)) and i >= 0):
+            imgname = imagelist[i] 
+            if(imgname.endswith(".bmp")):
+                print(imgname)
+                image_path = path+'/'+imgname
+                img = cv2.imread(image_path)
+                txt_path = (save_txt_path + imgname + '.txt')
+                img = reload_bboxes(txt_path, img)
+                bboxes, k = show_img(img)
+                write_bboxes(txt_path,bboxes)
+                cv2.imwrite(save_image_path+imgname, img)
+                i+=1
+                p.seek(0)
+                p.truncate()
+                p.write(str(i))
+                if k == 97:
+                    i -= 2 
+                elif k == 27:
+                    break
+        p.seek(0)
+        p.truncate()
+        p.write(str(i-1))

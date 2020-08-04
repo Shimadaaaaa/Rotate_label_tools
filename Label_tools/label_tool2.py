@@ -169,7 +169,7 @@ if __name__ == "__main__":
     txt_path = './txt'
     labeled_path = './labeled_image'
     img_format = '.png'
-    category = ['shp', 'other']
+    category = ['ship', 'other']
     data = Label(img_path, txt_path, labeled_path, img_format, category)
     data.work(True)
 

@@ -75,6 +75,9 @@ class Label():
                 line=np.array(line.split(' ')[:8])
                 box=line.reshape((4,2))
                 box = np.int0(box)
+                rect = cv2.minAreaRect(box)
+                box = cv2.boxPoints(rect)
+                box = np.int0(box)
                 if cate == self.category[0]:
                     cv2.drawContours(self.img, [box], 0, (255, 255, 0), 3)
                 else :
@@ -86,9 +89,9 @@ class Label():
         self.bboxes = []
         self.points = []
         cv2.namedWindow("image",0)
-        # cv2.resizeWindow("image", 640, 640)
-        cv2.setWindowProperty("image", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-        # cv2.moveWindow("image",20,20)
+        cv2.resizeWindow("image", 640, 640)
+        # cv2.setWindowProperty("image", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+        cv2.moveWindow("image",20,20)
         cv2.imshow('image', self.img)
         cv2.createTrackbar(self.switch, 'image',0,1,self.nothing)
         cv2.setMouseCallback('image', self.click_event)
